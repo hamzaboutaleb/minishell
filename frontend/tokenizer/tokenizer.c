@@ -6,7 +6,7 @@
 /*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:36:42 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/18 14:42:04 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:59:33 by hboutale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,21 @@ t_tokenizer *tokenizer_create()
 t_array *tokenize(t_tokenizer *tokenizer)
 {
 	t_token *token;
+	size_t len;
 	tokenizer->index = 0;
 	tokenizer->start = 0;
 	tokenizer->input = readline("minishell> ");
 	if (!tokenizer->input)
 		return (NULL);
-	token = tokenizer_next(tokenizer);
-	while (token)
+	len = ft_strlen(tokenizer->input);
+	while (tokenizer->index < len)
 	{
-		print_token(token);
+		tokenizer->start = tokenizer->index;
 		token = tokenizer_next(tokenizer);
+		if (token) {
+			array_push(tokenizer->tokens, token);
+			print_token(token);
+		}
 	}
 	free(tokenizer->input);
 	return (NULL);
@@ -126,7 +131,12 @@ char peek(t_tokenizer *tokenizer)
 	return tokenizer->input[tokenizer->index];
 }
 
-t_token *tokenize_string(t_tokenizer *tokenizer)
+t_token *tokenize_interpolated_string(t_tokenizer *tokenizer)
+{
+
+}
+
+t_token *tokenize_raw_string(t_tokenizer *tokenizer)
 {
 	char *str;
 	t_token *token;
@@ -150,11 +160,10 @@ t_token *tokenize_string(t_tokenizer *tokenizer)
 
 t_token *tokenizer_next(t_tokenizer *tokenizer)
 {
-	while (peek(tokenizer) == ' ')
-		advance(tokenizer);
-	tokenizer->start = tokenizer->start;
 	char c = advance(tokenizer);
-	if (c == '|')
+	if (c == ' ')
+		return (NULL);
+	else if (c == '|')
 	{
 		if (match(tokenizer, '|'))
 			return new_token(OR, ft_strdup("||"));
@@ -173,8 +182,8 @@ t_token *tokenizer_next(t_tokenizer *tokenizer)
 		return new_token(LESS, "<");
 	}
 	else if (c == '\'')
-	{
-		return tokenize_string(tokenizer);
-	}
+		return tokenize_raw_string(tokenizer);
+	else if (c == '"')
+		return tokenize_interpolated_string(tokenizer);
 	return (NULL);
 }
