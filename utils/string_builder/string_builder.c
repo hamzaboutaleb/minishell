@@ -6,7 +6,7 @@
 /*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 20:16:09 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/19 21:01:58 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/03/20 12:23:45 by hboutale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,15 @@ int sb_append_char(t_sb *sb, char c)
 	sb->len += 1;
 	sb->buffer[sb->len] = '\0';
 	return (1);
+}
+
+char *sb_build(t_sb *sb)
+{
+	char *s;
+
+	if (!sb)
+		return (NULL);
+	s = sb->buffer;
+	free(sb);
+	return (s);
 }

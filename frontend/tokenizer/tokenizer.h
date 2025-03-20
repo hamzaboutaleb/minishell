@@ -6,7 +6,7 @@
 /*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:36:39 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/18 14:35:08 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/03/20 12:40:05 by hboutale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <readline/history.h>
 #include "../../utils/libft/libft.h"
 #include "../../utils/array/array.h"
+#include "../../utils/string_builder/string_builder.h"
 
 typedef enum e_token_type
 {

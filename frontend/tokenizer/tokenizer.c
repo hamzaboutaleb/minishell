@@ -6,7 +6,7 @@
 /*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:36:42 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/19 13:59:33 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/03/20 13:39:03 by hboutale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ t_array *tokenize(t_tokenizer *tokenizer)
 	{
 		tokenizer->start = tokenizer->index;
 		token = tokenizer_next(tokenizer);
-		if (token) {
+		if (token)
+		{
 			array_push(tokenizer->tokens, token);
 			print_token(token);
 		}
@@ -131,31 +132,81 @@ char peek(t_tokenizer *tokenizer)
 	return tokenizer->input[tokenizer->index];
 }
 
-t_token *tokenize_interpolated_string(t_tokenizer *tokenizer)
+char prev(t_tokenizer *tokenizer)
 {
-
+	return tokenizer->input[tokenizer->index - 1];
 }
 
-t_token *tokenize_raw_string(t_tokenizer *tokenizer)
+void handle_variable(t_sb *sb, t_tokenizer *tokenizer)
 {
-	char *str;
-	t_token *token;
-
-	while (peek(tokenizer) && peek(tokenizer) != '\'')
+	int start;
+	char *name;
+	char *env_var;
+	start = tokenizer->index;
+	while (peek(tokenizer) && peek(tokenizer) != ' ' && peek(tokenizer) != '\'' && peek(tokenizer) != '"' && peek(tokenizer) != '$')
 		advance(tokenizer);
-	if (peek(tokenizer) == '\0')
-		return (NULL);
-	str = ft_substr(tokenizer->input, tokenizer->start + 1, tokenizer->index - tokenizer->start - 1);
-	advance(tokenizer); // skip single qoute
-	if (!str)
-		return (NULL);
-	token = new_token(STRING, str);
-	if (!token)
+	name = ft_substr(tokenizer->input, start, tokenizer->index - start);
+	env_var = getenv(name);
+	if (env_var)
+		sb_append(sb, env_var);
+	free(name);
+}
+
+void handle_double_qoute(t_sb *sb, t_tokenizer *tokenizer)
+{
+	char c;
+	while (peek(tokenizer) && peek(tokenizer) != '"')
 	{
-		free(str);
-		return NULL;
+		c = advance(tokenizer);
+		if (c == '$')
+			handle_variable(sb, tokenizer);
+		else
+			sb_append_char(sb, c);
 	}
-	return token;
+}
+
+void handle_single_qoute(t_sb *sb, t_tokenizer *tokenizer)
+{
+	while (peek(tokenizer) && peek(tokenizer) != '\'')
+		sb_append_char(sb, advance(tokenizer));
+	if (peek(tokenizer) == 0)
+		return; // TODO: handle error
+	else
+		advance(tokenizer);
+}
+
+void handle_word(t_sb *sb, t_tokenizer *tokenizer)
+{
+	while (peek(tokenizer) && peek(tokenizer) != ' ' && peek(tokenizer) != '\'' && peek(tokenizer) != '"' && peek(tokenizer) != '$')
+		sb_append_char(sb, advance(tokenizer));
+	printf("stop char is '%c'\n", peek(tokenizer));
+}
+
+t_token *tokenize_string(t_tokenizer *tokenizer)
+{
+	char c;
+	t_sb *sb;
+	tokenizer->index--;
+
+	sb = sb_create();
+	if (!sb)
+		return (NULL);
+	while (peek(tokenizer) && peek(tokenizer) != ' ')
+	{
+		c = advance(tokenizer);
+		if (c == '\'')
+			handle_single_qoute(sb, tokenizer);
+		else if (c == '$')
+			handle_variable(sb, tokenizer);
+		else if (c == '"')
+			handle_double_qoute(sb, tokenizer);
+		else
+		{
+			tokenizer->index--;
+			handle_word(sb, tokenizer);
+		}
+	}
+	return new_token(STRING, sb_build(sb));
 }
 
 t_token *tokenizer_next(t_tokenizer *tokenizer)
@@ -181,9 +232,7 @@ t_token *tokenizer_next(t_tokenizer *tokenizer)
 			return new_token(HERE_DOC, "<<");
 		return new_token(LESS, "<");
 	}
-	else if (c == '\'')
-		return tokenize_raw_string(tokenizer);
-	else if (c == '"')
-		return tokenize_interpolated_string(tokenizer);
+	else
+		return tokenize_string(tokenizer);
 	return (NULL);
 }
