@@ -6,7 +6,7 @@
 /*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:36:42 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/20 13:39:03 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/03/22 23:18:43 by hboutale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,12 +157,14 @@ void handle_double_qoute(t_sb *sb, t_tokenizer *tokenizer)
 	char c;
 	while (peek(tokenizer) && peek(tokenizer) != '"')
 	{
+		printf("test\n");
 		c = advance(tokenizer);
 		if (c == '$')
 			handle_variable(sb, tokenizer);
 		else
 			sb_append_char(sb, c);
 	}
+	advance(tokenizer);
 }
 
 void handle_single_qoute(t_sb *sb, t_tokenizer *tokenizer)
@@ -193,6 +195,7 @@ t_token *tokenize_string(t_tokenizer *tokenizer)
 		return (NULL);
 	while (peek(tokenizer) && peek(tokenizer) != ' ')
 	{
+		printf("current char %c\n", peek(tokenizer));
 		c = advance(tokenizer);
 		if (c == '\'')
 			handle_single_qoute(sb, tokenizer);
