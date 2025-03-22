@@ -6,7 +6,7 @@
 /*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:36:42 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/22 23:18:43 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/03/22 23:20:29 by hboutale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,14 @@ void handle_double_qoute(t_sb *sb, t_tokenizer *tokenizer)
 		else
 			sb_append_char(sb, c);
 	}
-	advance(tokenizer);
+	if (!peek(tokenizer))
+	{
+		// handle error
+	}
+	else
+	{
+		advance(tokenizer);
+	}
 }
 
 void handle_single_qoute(t_sb *sb, t_tokenizer *tokenizer)
