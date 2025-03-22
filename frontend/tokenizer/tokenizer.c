@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:36:42 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/20 13:39:03 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:13:52 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ t_array *tokenize(t_tokenizer *tokenizer)
 	tokenizer->input = readline("minishell> ");
 	if (!tokenizer->input)
 		return (NULL);
+	add_history(tokenizer->input);
 	len = ft_strlen(tokenizer->input);
 	while (tokenizer->index < len)
 	{

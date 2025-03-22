@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:32:58 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/20 12:17:31 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:14:04 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,5 @@ int main(int ac, char **av)
 	{
 		tokenize(tokenizer);
 	}
+	clear_history();
 }
