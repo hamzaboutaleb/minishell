@@ -6,7 +6,7 @@
 /*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:36:39 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/20 12:40:05 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:28:09 by hboutale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 
 typedef enum e_token_type
 {
-	WORD,
 	STRING,	  // "" || ''
 	GREATER,  // >
 	LESS,	  // <

@@ -6,21 +6,28 @@
 /*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:32:58 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/20 12:17:31 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:13:00 by hboutale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./frontend/tokenizer/tokenizer.h"
+#include "./frontend/parser/parser.h"
 
 int main(int ac, char **av)
 {
 	t_tokenizer *tokenizer;
+	t_parser *parser;
+	t_array *tokens;
+	t_ast_node *ast;
 	(void)av;
-	printf("number of args %d\n", ac);
-	tokenizer = tokenizer_create();
-
 	while (1)
 	{
-		tokenize(tokenizer);
+		tokenizer = tokenizer_create();
+		tokens = tokenize(tokenizer);
+		if (!tokens)
+			continue;
+		parser = new_parser(tokens);
+		ast = parse(parser);
+		print_ast(ast);
 	}
 }

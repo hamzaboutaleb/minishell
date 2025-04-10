@@ -6,7 +6,7 @@
 /*   By: hboutale <hboutale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:36:42 by hboutale          #+#    #+#             */
-/*   Updated: 2025/03/22 23:20:29 by hboutale         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:04:41 by hboutale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_array *tokenize(t_tokenizer *tokenizer)
 		}
 	}
 	free(tokenizer->input);
-	return (NULL);
+	return (tokenizer->tokens);
 }
 
 t_token *new_token(t_token_type type, char *value)
@@ -157,7 +157,6 @@ void handle_double_qoute(t_sb *sb, t_tokenizer *tokenizer)
 	char c;
 	while (peek(tokenizer) && peek(tokenizer) != '"')
 	{
-		printf("test\n");
 		c = advance(tokenizer);
 		if (c == '$')
 			handle_variable(sb, tokenizer);
@@ -188,7 +187,6 @@ void handle_word(t_sb *sb, t_tokenizer *tokenizer)
 {
 	while (peek(tokenizer) && peek(tokenizer) != ' ' && peek(tokenizer) != '\'' && peek(tokenizer) != '"' && peek(tokenizer) != '$')
 		sb_append_char(sb, advance(tokenizer));
-	printf("stop char is '%c'\n", peek(tokenizer));
 }
 
 t_token *tokenize_string(t_tokenizer *tokenizer)
@@ -202,7 +200,6 @@ t_token *tokenize_string(t_tokenizer *tokenizer)
 		return (NULL);
 	while (peek(tokenizer) && peek(tokenizer) != ' ')
 	{
-		printf("current char %c\n", peek(tokenizer));
 		c = advance(tokenizer);
 		if (c == '\'')
 			handle_single_qoute(sb, tokenizer);
